@@ -102,6 +102,8 @@ export const emptyThermalEnergyPreference =
     type: "thermal",
     stat_energy_from: "",
     stat_cost: null,
+    entity_energy_price: null,
+    number_energy_price: null,
   });
 
 export const emptyWaterEnergyPreference =
@@ -209,6 +211,8 @@ export interface ThermalSourceTypeEnergyPreference {
   type: "thermal";
   stat_energy_from: string;
   stat_cost?: string;
+  entity_energy_price: string | null;
+  number_energy_price: number | null;
   name?: string;
 }
 
