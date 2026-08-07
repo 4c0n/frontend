@@ -178,6 +178,7 @@ class PanelEnergy extends LitElement {
       overview: "electricity",
       electricity: "electricity",
       gas: "gas",
+      thermal: "thermal",
       water: "water",
       now: "electricity",
     };

@@ -133,6 +133,23 @@ export class EnergyOverviewViewStrategy extends ReactiveElement {
       });
     }
 
+    if (
+      isEnergyCardVisible("overview", "energy-thermal-graph", prefs, hidden)
+    ) {
+      view.sections!.push({
+        type: "grid",
+        cards: [
+          {
+            title: hass.localize(
+              "ui.panel.energy.cards.energy_thermal_graph_title"
+            ),
+            type: "energy-thermal-graph",
+            collection_key: collectionKey,
+          },
+        ],
+      });
+    }
+
     if (isEnergyCardVisible("overview", "energy-water-graph", prefs, hidden)) {
       view.sections!.push({
         type: "grid",
