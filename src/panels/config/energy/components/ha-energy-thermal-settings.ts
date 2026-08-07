@@ -1,4 +1,4 @@
-import { mdiDelete, mdiFire, mdiPencil, mdiPlus } from "@mdi/js";
+import { mdiDelete, mdiHeatingCoil, mdiPencil, mdiPlus } from "@mdi/js";
 import type { CSSResultGroup, TemplateResult } from "lit";
 import { html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators";
@@ -56,7 +56,7 @@ export class EnergyThermalSettings extends LitElement {
     return html`
       <ha-card>
         <h1 class="card-header">
-          <ha-svg-icon .path=${mdiFire}></ha-svg-icon>
+          <ha-svg-icon .path=${mdiHeatingCoil}></ha-svg-icon>
           ${this.hass.localize("ui.panel.config.energy.thermal.title")}
         </h1>
 
@@ -93,7 +93,7 @@ export class EnergyThermalSettings extends LitElement {
                                   .icon=${entityState.attributes.icon}
                                 ></ha-icon>`
                               : html`<ha-svg-icon
-                                  .path=${mdiFire}
+                                  .path=${mdiHeatingCoil}
                                 ></ha-svg-icon>`
                           }
                           <span class="content"
