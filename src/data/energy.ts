@@ -44,7 +44,7 @@ import {
 export const ENERGY_COLLECTION_KEY_PREFIX = "energy_";
 
 // Collection key for the statistics-based energy dashboard views (Overview,
-// Electricity, Gas, Water).
+// Electricity, Gas, Thermal, Water).
 export const DEFAULT_ENERGY_COLLECTION_KEY = "energy_dashboard";
 // Collection key for the real-time "Now" view (live power + 5-minute stats).
 export const DEFAULT_POWER_COLLECTION_KEY = "energy_dashboard_now";
@@ -96,6 +96,13 @@ export const emptyGasEnergyPreference = (): GasSourceTypeEnergyPreference => ({
   entity_energy_price: null,
   number_energy_price: null,
 });
+
+export const emptyThermalEnergyPreference =
+  (): ThermalSourceTypeEnergyPreference => ({
+    type: "thermal",
+    stat_energy_from: "",
+    stat_cost: null,
+  });
 
 export const emptyWaterEnergyPreference =
   (): WaterSourceTypeEnergyPreference => ({
@@ -177,6 +184,7 @@ export interface BatterySourceTypeEnergyPreference {
   capacity?: number; // usable capacity in kWh, used to weight the combined SOC
   name?: string;
 }
+
 export interface GasSourceTypeEnergyPreference {
   type: "gas";
 
@@ -194,6 +202,13 @@ export interface GasSourceTypeEnergyPreference {
   number_energy_price: number | null;
   unit_of_measurement?: string | null;
 
+  name?: string;
+}
+
+export interface ThermalSourceTypeEnergyPreference {
+  type: "thermal";
+  stat_energy_from: string;
+  stat_cost?: string;
   name?: string;
 }
 
@@ -222,6 +237,7 @@ export type EnergySource =
   | GridSourceTypeEnergyPreference
   | BatterySourceTypeEnergyPreference
   | GasSourceTypeEnergyPreference
+  | ThermalSourceTypeEnergyPreference
   | WaterSourceTypeEnergyPreference;
 
 export interface EnergyPreferences {
@@ -306,6 +322,7 @@ export interface EnergySourceByType {
   solar?: SolarSourceTypeEnergyPreference[];
   battery?: BatterySourceTypeEnergyPreference[];
   gas?: GasSourceTypeEnergyPreference[];
+  thermal?: ThermalSourceTypeEnergyPreference[];
   water?: WaterSourceTypeEnergyPreference[];
 }
 
@@ -381,6 +398,7 @@ export interface EnergyData {
   fossilEnergyConsumptionCompare?: FossilEnergyConsumption;
   waterUnit: string;
   gasUnit: string;
+  thermalUnit: string;
 }
 
 export const getReferencedStatisticIds = (
@@ -400,7 +418,11 @@ export const getReferencedStatisticIds = (
       continue;
     }
 
-    if (source.type === "gas" || source.type === "water") {
+    if (
+      source.type === "gas" ||
+      source.type === "thermal" ||
+      source.type === "water"
+    ) {
       statIDs.push(source.stat_energy_from);
 
       if (source.stat_cost) {
@@ -532,6 +554,7 @@ const getEnergyData = async (
     "solar",
     "battery",
     "gas",
+    "thermal",
     "device",
   ]);
   const powerStatIds = getReferencedStatisticIdsPower(prefs);
@@ -571,6 +594,7 @@ const getEnergyData = async (
   const waterUnits: StatisticsUnitConfiguration = {
     volume: waterUnit,
   };
+  const thermalUnit = "GJ";
 
   const _energyStats: Statistics | Promise<Statistics> = energyStatIds.length
     ? fetchStatistics(hass!, start, end, energyStatIds, period, energyUnits, [
@@ -766,6 +790,7 @@ const getEnergyData = async (
     fossilEnergyConsumptionCompare,
     waterUnit,
     gasUnit,
+    thermalUnit,
   };
 
   return data;
