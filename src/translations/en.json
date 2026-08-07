@@ -4330,7 +4330,22 @@
             "learn_more": "More information on how to get started",
             "add_thermal_source": "Add thermal source",
             "edit_thermal_source": "Edit thermal source",
-            "delete_thermal_source": "Remove thermal source"
+            "delete_thermal_source": "Remove thermal source",
+            "dialog": {
+              "entity_para": "Pick a sensor which measures thermal energy consumption in either of {unit}.",
+              "cost_entity": "[%key:ui::panel::config::energy::grid::flow_dialog::from::cost_entity%]",
+              "cost_entity_helper": "Any entity with a unit of `{currency}/GJ` may be used and will be automatically converted.",
+              "cost_entity_input": "[%key:ui::panel::config::energy::grid::flow_dialog::from::cost_entity_input%]",
+              "cost_number": "[%key:ui::panel::config::energy::grid::flow_dialog::from::cost_number%]",
+              "cost_number_input": "[%key:ui::panel::config::energy::grid::flow_dialog::from::cost_number%]",
+              "cost_para": "Select how Home Assistant should keep track of the costs of the consumed thermal energy.",
+              "cost_stat": "[%key:ui::panel::config::energy::grid::flow_dialog::from::cost_stat%]",
+              "cost_stat_input": "[%key:ui::panel::config::energy::grid::flow_dialog::from::cost_stat_input%]",
+              "display_name": "[%key:ui::panel::config::energy::device_consumption::dialog::display_name%]",
+              "header": "Configure thermal source",
+              "no_cost": "[%key:ui::panel::config::energy::grid::flow_dialog::from::no_cost%]",
+              "thermal_usage": "Thermal energy consumption"
+            }
           },
           "battery": {
             "title": "Home battery storage",
