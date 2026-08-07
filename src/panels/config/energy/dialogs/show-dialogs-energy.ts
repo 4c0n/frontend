@@ -5,6 +5,7 @@ import type {
   EnergyGasUnitClass,
   EnergyInfo,
   GasSourceTypeEnergyPreference,
+  ThermalSourceTypeEnergyPreference,
   GridSourceTypeEnergyPreference,
   SolarSourceTypeEnergyPreference,
   WaterSourceTypeEnergyPreference,
@@ -39,6 +40,13 @@ export interface EnergySettingsGasDialogParams {
   gas_sources: GasSourceTypeEnergyPreference[];
   statsMetadata?: Record<string, StatisticsMetaData>;
   saveCallback: (source: GasSourceTypeEnergyPreference) => Promise<void>;
+}
+
+export interface EnergySettingsThermalDialogParams {
+  source?: ThermalSourceTypeEnergyPreference;
+  thermal_sources: ThermalSourceTypeEnergyPreference[];
+  statsMetadata?: Record<string, StatisticsMetadata>;
+  saveCallback: (source: ThermalSourceTypeEnergyPreference) => Promise<void>;
 }
 
 export interface EnergySettingsWaterDialogParams {
@@ -102,6 +110,17 @@ export const showEnergySettingsGasDialog = (
   fireEvent(element, "show-dialog", {
     dialogTag: "dialog-energy-gas-settings",
     dialogImport: () => import("./dialog-energy-gas-settings"),
+    dialogParams: dialogParams,
+  });
+};
+
+export const showEnergySettingsThermalDialog = (
+  element: HTMLElement,
+  dialogParams: EnergySettingsThermalDialogParams
+): void => {
+  fireEvent(element, "show-dialog", {
+    dialogTag: "dialog-energy-thermal-settings",
+    dialogImport: () => import("./dialog-energy-thermal-settings"),
     dialogParams: dialogParams,
   });
 };
