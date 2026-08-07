@@ -23,7 +23,6 @@ import {
   getStatisticMetadata,
   isExternalStatistic,
 } from "../../../../data/recorder";
-import { getSensorDeviceClassConvertibleUnits } from "../../../../data/sensor";
 import type { HassDialog } from "../../../../dialogs/make-dialog-manager";
 import { DirtyStateProviderMixin } from "../../../../mixins/dirty-state-provider-mixin";
 import { haStyle, haStyleDialog } from "../../../../resources/styles";
@@ -53,8 +52,6 @@ export class DialogEnergyThermalSettings
 
   @state() private _costs?: CostType;
 
-  @state() private _thermal_units?: string[];
-
   @state() private _error?: string;
 
   private _excludeList?: string[];
@@ -75,9 +72,6 @@ export class DialogEnergyThermalSettings
         : this._source.stat_cost
           ? "statistic"
           : "no-costs";
-    this._thermal_units = (
-      await getSensorDeviceClassConvertibleUnits(this.hass, "thermal")
-    ).units;
     this._excludeList = this._params.thermal_sources
       .map((entry) => entry.stat_energy_from)
       .filter((id) => id !== this._source?.stat_energy_from);
@@ -107,8 +101,6 @@ export class DialogEnergyThermalSettings
       return nothing;
     }
 
-    const pickableUnit = this._thermal_units?.join(", ") || "";
-
     const unitPriceFixed = `${this.hass.config.currency}/GJ`;
 
     const externalSource =
@@ -129,8 +121,8 @@ export class DialogEnergyThermalSettings
         <ha-statistic-picker
           .hass=${this.hass}
           .helpMissingEntityUrl=${energyStatisticHelpUrl}
-          include-unit-class="volume"
-          include-device-class="t"
+          include-unit-class="energy"
+          include-device-class="energy"
           .value=${this._source.stat_energy_from}
           .label=${this.hass.localize(
             "ui.panel.config.energy.thermal.dialog.thermal_usage"
@@ -138,8 +130,7 @@ export class DialogEnergyThermalSettings
           .excludeStatistics=${this._excludeList}
           @value-changed=${this._statisticChanged}
           .helper=${this.hass.localize(
-            "ui.panel.config.energy.thermal.dialog.entity_para",
-            { unit: pickableUnit }
+            "ui.panel.config.energy.thermal.dialog.entity_para"
           )}
           autofocus
         ></ha-statistic-picker>

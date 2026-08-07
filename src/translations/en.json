@@ -4332,7 +4332,7 @@
             "edit_thermal_source": "Edit thermal source",
             "delete_thermal_source": "Remove thermal source",
             "dialog": {
-              "entity_para": "Pick a sensor which measures thermal energy consumption in either of {unit}.",
+              "entity_para": "Pick a sensor which measures thermal energy consumption in GJ.",
               "cost_entity": "[%key:ui::panel::config::energy::grid::flow_dialog::from::cost_entity%]",
               "cost_entity_helper": "Any entity with a unit of `{currency}/GJ` may be used and will be automatically converted.",
               "cost_entity_input": "[%key:ui::panel::config::energy::grid::flow_dialog::from::cost_entity_input%]",
