@@ -4220,6 +4220,7 @@
           "tabs": {
             "electricity": "Electricity",
             "gas": "Gas",
+            "thermal": "Thermal",
             "water": "Water"
           },
           "customise": {
@@ -4322,6 +4323,14 @@
               "forecast_production": "Forecast production",
               "add_forecast": "Add forecast"
             }
+          },
+          "thermal": {
+            "title": "Thermal energy",
+            "sub": "Let Home Assistant monitor your thermal energy.",
+            "learn_more": "More information on how to get started",
+            "add_thermal_source": "Add thermal source",
+            "edit_thermal_source": "Edit thermal source",
+            "delete_thermal_source": "Remove thermal source"
           },
           "battery": {
             "title": "Home battery storage",
