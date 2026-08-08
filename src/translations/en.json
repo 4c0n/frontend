@@ -9341,7 +9341,7 @@
               "total_consumed": "Total {num} GJ"
             },
             "energy_water_graph": {
-              "total_consumed": "[%key:ui::panel::lovelace::cards::energy::energy_gas_graph::total_consumed%]"
+              "total_consumed": "[%key:ui::panel::lovelace::cards::energy::energy_water_graph::total_consumed%]"
             },
             "solar_consumed_gauge": {
               "card_indicates_solar_energy_used": "This card indicates how much of the solar energy you produced was used by your home instead of being exported to the grid.",
