@@ -204,6 +204,10 @@ export interface EnergyGasGraphCardConfig extends EnergyCardConfig {
   type: "energy-gas-graph";
 }
 
+export interface EnergyThermalGraphCardConfig extends EnergyCardConfig {
+  type: "energy-thermal-graph";
+}
+
 export interface EnergyWaterGraphCardConfig extends EnergyCardConfig {
   type: "energy-water-graph";
 }
