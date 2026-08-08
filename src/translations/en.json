@@ -9314,6 +9314,7 @@
             "energy_sources_table": {
               "grid_total": "Grid total",
               "gas_total": "Gas total",
+              "thermal_total": "Thermal total",
               "solar_total": "Solar total",
               "water_total": "Water total",
               "source": "Source",
@@ -10122,6 +10123,10 @@
               "name": "Gas consumption graph",
               "description": "This card shows the amount of gas consumed per source."
             },
+            "energy-thermal-graph": {
+              "name": "Thermal consumption graph",
+              "description": "This card show the amount of thermal energy consumed per source."
+            },
             "energy-water-graph": {
               "name": "Water consumption graph",
               "description": "This card shows the amount of water consumed per source."
@@ -10152,6 +10157,7 @@
                 "solar": "Solar",
                 "battery": "Battery",
                 "gas": "Gas",
+                "thermal": "Thermal",
                 "water": "Water"
               }
             },
@@ -11855,6 +11861,7 @@
           "overview": "Summary",
           "electricity": "Electricity",
           "gas": "Gas",
+          "thermal": "Thermal",
           "water": "Water",
           "now": "Now"
         },
