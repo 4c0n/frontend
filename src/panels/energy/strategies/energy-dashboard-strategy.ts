@@ -136,7 +136,7 @@ export class EnergyDashboardStrategy extends ReactiveElement {
     }
     if (
       hasPowerSource ||
-      [hasEnergy, hasGas, hasWater].filter(Boolean).length > 1
+      [hasEnergy, hasGas, hasThermal, hasWater].filter(Boolean).length > 1
     ) {
       candidateViews.unshift(OVERVIEW_VIEW);
     }
