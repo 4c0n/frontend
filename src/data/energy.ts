@@ -558,13 +558,18 @@ const getEnergyData = async (
     "solar",
     "battery",
     "gas",
-    "thermal",
     "device",
   ]);
   const powerStatIds = getReferencedStatisticIdsPower(prefs);
+  const thermalStatIds = getReferencedStatisticIds(prefs, info, ["thermal"]);
   const waterStatIds = getReferencedStatisticIds(prefs, info, ["water"]);
 
-  const allStatIDs = [...energyStatIds, ...waterStatIds, ...powerStatIds];
+  const allStatIDs = [
+    ...energyStatIds,
+    ...waterStatIds,
+    ...thermalStatIds,
+    ...powerStatIds,
+  ];
 
   const dayDifference = differenceInDays(end || new Date(), start);
 
@@ -599,6 +604,9 @@ const getEnergyData = async (
     volume: waterUnit,
   };
   const thermalUnit = "GJ";
+  const thermalUnits: StatisticsUnitConfiguration = {
+    energy: thermalUnit,
+  };
 
   const _energyStats: Statistics | Promise<Statistics> = energyStatIds.length
     ? fetchStatistics(hass!, start, end, energyStatIds, period, energyUnits, [
@@ -619,7 +627,11 @@ const getEnergyData = async (
           "mean",
         ])
       : {};
-
+  const _thermalStats: Statistics | Promise<Statistics> = thermalStatIds.length
+    ? fetchStatistics(hass!, start, end, thermalStatIds, period, thermalUnits, [
+        "change",
+      ])
+    : {};
   const _waterStats: Statistics | Promise<Statistics> = waterStatIds.length
     ? fetchStatistics(hass!, start, end, waterStatIds, period, waterUnits, [
         "change",
@@ -727,6 +739,7 @@ const getEnergyData = async (
     energyStats,
     powerStats,
     powerStatsHour,
+    thermalStats,
     waterStats,
     energyStatsCompare,
     waterStatsCompare,
@@ -736,6 +749,7 @@ const getEnergyData = async (
     _energyStats,
     _powerStats,
     _powerStatsHour,
+    _thermalStats,
     _waterStats,
     _energyStatsCompare,
     _waterStatsCompare,
@@ -773,7 +787,12 @@ const getEnergyData = async (
     });
   }
 
-  const stats = { ...energyStats, ...waterStats, ...powerStats };
+  const stats = {
+    ...energyStats,
+    ...waterStats,
+    ...powerStats,
+    ...thermalStats,
+  };
   if (compare) {
     statsCompare = { ...energyStatsCompare, ...waterStatsCompare };
   }
