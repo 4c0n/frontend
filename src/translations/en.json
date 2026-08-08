@@ -9336,6 +9336,9 @@
             "energy_gas_graph": {
               "total_consumed": "Total {num} {unit}"
             },
+            "energy_thermal_graph": {
+              "total_consumed": "Total {num} GJ"
+            },
             "energy_water_graph": {
               "total_consumed": "[%key:ui::panel::lovelace::cards::energy::energy_gas_graph::total_consumed%]"
             },
@@ -9369,6 +9372,7 @@
               "title_today": "Energy distribution today",
               "grid": "Grid",
               "gas": "Gas",
+              "thermal": "Thermal",
               "water": "Water",
               "solar": "Solar",
               "low_carbon": "Low-carbon",
@@ -9408,7 +9412,8 @@
             },
             "power_total_title": "Power usage",
             "water_total_title": "[%key:ui::panel::config::energy::water::dialog::water_flow_rate%]",
-            "gas_total_title": "[%key:ui::panel::config::energy::gas::dialog::gas_flow_rate%]"
+            "gas_total_title": "[%key:ui::panel::config::energy::gas::dialog::gas_flow_rate%]",
+            "thermal_total_title": "Thermal energy usage"
           },
           "distribution": {
             "no_entities": "No entities specified",
@@ -11871,6 +11876,7 @@
           "energy_usage_graph_title": "Electricity",
           "energy_solar_graph_title": "Solar production",
           "energy_gas_graph_title": "Gas consumption",
+          "energy_thermal_graph_title": "Thermal energy consumption",
           "energy_water_graph_title": "Water consumption",
           "energy_distribution_title": "Energy distribution",
           "energy_sources_table_title": "Totals",
