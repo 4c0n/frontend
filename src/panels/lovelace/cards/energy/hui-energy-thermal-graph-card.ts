@@ -111,7 +111,7 @@ export class HuiEnergyThermalGraphCard
                     ? html`<hui-energy-graph-chip
                         .tooltip=${this._formatTotal(this._total)}
                       >
-                        ${formatNumber(this._total, this.hass.locale)}
+                        ${formatNumber(this._total, this.hass.locale, { maximumFractionDigits: 3 })}
                         ${this._unit}
                       </hui-energy-graph-chip>`
                     : nothing
@@ -162,7 +162,12 @@ export class HuiEnergyThermalGraphCard
   private _formatTotal = (total: number) =>
     this.hass.localize(
       "ui.panel.lovelace.cards.energy.energy_thermal_graph.total_consumed",
-      { num: formatNumber(total, this.hass.locale), unit: this._unit }
+      {
+        num: formatNumber(total, this.hass.locale, {
+          maximumFractionDigits: 3,
+        }),
+        unit: this._unit,
+      }
     );
 
   private _createOptions = memoizeOne(
