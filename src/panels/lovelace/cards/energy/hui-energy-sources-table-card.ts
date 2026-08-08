@@ -298,11 +298,9 @@ export class HuiEnergySourcesTableCard
         ${
           energy === null
             ? ""
-            : `${formatNumber(
-                energy,
-                this.hass.locale,
-                formatOptions
-              )} ${energyUnit}`
+            : energyUnit !== "GJ"
+              ? `${formatNumber(energy, this.hass.locale, formatOptions)} ${energyUnit}`
+              : `${formatNumber(energy, this.hass.locale, { maximumFractionDigits: 3 })} ${energyUnit}`
         }
       </td>
       ${
