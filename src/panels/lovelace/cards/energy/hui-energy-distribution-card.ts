@@ -519,17 +519,16 @@ class HuiEnergyDistrubutionCard
                               <ha-svg-icon
                                 .path=${mdiHeatingCoil}
                               ></ha-svg-icon>
-                              ${formatConsumptionShort(
-                              this.hass,
-                              thermalUsage,
-                              this._data.thermalUnit
-                            )}
+                              ${formatNumber(thermalUsage, this.hass.locale, {
+                                maximumFractionDigits: 3,
+                              })}
+                              ${this._data.thermalUnit}
                             </div>
                             <svg width="80" height="30">
                               <path d="M40 0 v30" id="thermal" />
                               ${
-                              thermalUsage && this._animate
-                                ? svg`<circle
+                                thermalUsage && this._animate
+                                  ? svg`<circle
                                     r="1"
                                     class="thermal"
                                     vector-effect="non-scaling-stroke"
@@ -542,8 +541,8 @@ class HuiEnergyDistrubutionCard
                                       <mpath xlink:href="#thermal" />
                                     </animateMotion>
                                   </circle>`
-                                : ""
-                            }
+                                  : ""
+                              }
                             </svg>
                           </div>`
                         : hasWater
