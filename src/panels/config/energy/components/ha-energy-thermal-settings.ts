@@ -164,7 +164,7 @@ export class EnergyThermalSettings extends LitElement {
       statsMetadata: this.statsMetadata,
       thermal_sources: this.preferences.energy_sources.filter(
         (src) => src.type === "thermal"
-      ) as GasSourceTypeEnergyPreference[],
+      ) as ThermalSourceTypeEnergyPreference[],
       saveCallback: async (newSource) => {
         await this._savePreferences({
           ...this.preferences,
