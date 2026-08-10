@@ -259,7 +259,7 @@ export const ENERGY_CARD_CATALOG: readonly EnergyCardCatalogEntry[] = [
   ),
   entry(
     "thermal",
-    "thermal-sources-table",
+    "energy-sources-table",
     "ui.panel.energy.cards.energy_sources_table_title",
     (p) => hasThermalSource(p)
   ),
