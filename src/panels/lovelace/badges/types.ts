@@ -77,3 +77,7 @@ export interface WaterTotalBadgeConfig extends EnergyTotalBadgeConfig {
 export interface GasTotalBadgeConfig extends EnergyTotalBadgeConfig {
   type: "gas-total";
 }
+
+export interface ThermalTotalBadgeConfig extends EnergyTotalBadgeConfig {
+  type: "thermal-total";
+}

@@ -32,6 +32,7 @@ const colorPropertyMap = {
   battery_out: "--energy-battery-out-color",
   solar: "--energy-solar-color",
   gas: "--energy-gas-color",
+  thermal: "--energy-thermal-color",
   water: "--energy-water-color",
 };
 
@@ -297,11 +298,9 @@ export class HuiEnergySourcesTableCard
         ${
           energy === null
             ? ""
-            : `${formatNumber(
-                energy,
-                this.hass.locale,
-                formatOptions
-              )} ${energyUnit}`
+            : energyUnit !== "GJ"
+              ? `${formatNumber(energy, this.hass.locale, formatOptions)} ${energyUnit}`
+              : `${formatNumber(energy, this.hass.locale, { maximumFractionDigits: 3 })} ${energyUnit}`
         }
       </td>
       ${
@@ -344,24 +343,29 @@ export class HuiEnergySourcesTableCard
 
     const totals = {
       gas: 0,
+      thermal: 0,
       water: 0,
       solar: 0,
     };
     const totalsCompare = {
       gas: 0,
+      thermal: 0,
       water: 0,
       solar: 0,
     };
     const totalCosts = {
       gas: 0,
+      thermal: 0,
       water: 0,
     };
     const totalCostsCompare = {
       gas: 0,
+      thermal: 0,
       water: 0,
     };
     const hasCosts = {
       gas: false,
+      thermal: false,
       water: false,
     };
 
@@ -394,6 +398,10 @@ export class HuiEnergySourcesTableCard
         (flow) =>
           flow.stat_cost || flow.entity_energy_price || flow.number_energy_price
       ) ||
+      types.thermal?.some(
+        (flow) =>
+          flow.stat_cost || flow.entity_energy_price || flow.number_energy_price
+      ) ||
       types.water?.some(
         (flow) =>
           flow.stat_cost || flow.entity_energy_price || flow.number_energy_price
@@ -403,6 +411,7 @@ export class HuiEnergySourcesTableCard
     const units = {
       solar: "kWh",
       gas: this._data.gasUnit,
+      thermal: "GJ",
       water: this._data.waterUnit,
     };
 
@@ -480,7 +489,9 @@ export class HuiEnergySourcesTableCard
 
     const showOnlyTotals = this._config.show_only_totals;
 
-    const _renderSimpleCategory = (type: "solar" | "gas" | "water") =>
+    const _renderSimpleCategory = (
+      type: "solar" | "gas" | "thermal" | "water"
+    ) =>
       html` ${types[type]?.map((source, idx) => {
         const cost_stat =
           type in hasCosts &&
@@ -876,10 +887,16 @@ export class HuiEnergySourcesTableCard
                     )
                   : ""
               }
-              ${_renderSimpleCategory("gas")} ${_renderSimpleCategory("water")}
+              ${_renderSimpleCategory("gas")}
+              ${_renderSimpleCategory("thermal")}
+              ${_renderSimpleCategory("water")}
               ${
-                [hasCosts.gas, hasCosts.water, hasGridCost].filter(Boolean)
-                  .length > 1
+                [
+                  hasCosts.gas,
+                  hasCosts.thermal,
+                  hasCosts.water,
+                  hasGridCost,
+                ].filter(Boolean).length > 1
                   ? this._renderTotalRow(
                       this.hass.localize(
                         "ui.panel.lovelace.cards.energy.energy_sources_table.total_costs"
@@ -887,8 +904,12 @@ export class HuiEnergySourcesTableCard
                       null,
                       null,
                       "",
-                      totalCosts.gas + totalGridCost + totalCosts.water,
+                      totalCosts.gas +
+                        totalGridCost +
+                        totalCosts.thermal +
+                        totalCosts.water,
                       totalCostsCompare.gas +
+                        totalCostsCompare.thermal +
                         totalGridCostCompare +
                         totalCostsCompare.water,
                       showCosts,

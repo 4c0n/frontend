@@ -12,7 +12,7 @@ export interface EnergyViewStrategyConfig extends LovelaceStrategyConfig {
 }
 
 export type EnergyViewPath =
-  "overview" | "electricity" | "gas" | "water" | "now";
+  "overview" | "electricity" | "gas" | "thermal" | "water" | "now";
 
 // --- Applicability helpers -------------------------------------------------
 // Source-shape predicates shared by the catalog entries below, the view
@@ -47,6 +47,9 @@ export const hasEnergySource = (prefs: EnergyPreferences): boolean =>
 
 export const hasGasSource = (prefs: EnergyPreferences): boolean =>
   prefs.energy_sources.some((source) => source.type === "gas");
+
+export const hasThermalSource = (prefs: EnergyPreferences): boolean =>
+  prefs.energy_sources.some((source) => source.type === "thermal");
 
 export const hasWaterSource = (prefs: EnergyPreferences): boolean =>
   prefs.energy_sources.some((source) => source.type === "water");
@@ -143,6 +146,12 @@ export const ENERGY_CARD_CATALOG: readonly EnergyCardCatalogEntry[] = [
     "energy-gas-graph",
     "ui.panel.energy.cards.energy_gas_graph_title",
     (p) => hasGasSource(p)
+  ),
+  entry(
+    "overview",
+    "energy-thermal-graph",
+    "ui.panel.energy.cards.energy_thermal_graph_title",
+    (p) => hasThermalSource(p)
   ),
   // One toggle gates the water row, which renders energy-water-graph (sources)
   // or, with only water devices, water-sankey.
@@ -241,6 +250,19 @@ export const ENERGY_CARD_CATALOG: readonly EnergyCardCatalogEntry[] = [
     (p) => hasGasSource(p)
   ),
 
+  // --- Thermal ---
+  entry(
+    "thermal",
+    "energy-thermal-graph",
+    "ui.panel.energy.cards.energy_thermal_graph_title",
+    (p) => hasThermalSource(p)
+  ),
+  entry(
+    "thermal",
+    "energy-sources-table",
+    "ui.panel.energy.cards.energy_sources_table_title",
+    (p) => hasThermalSource(p)
+  ),
   // --- Water ---
   entry(
     "water",

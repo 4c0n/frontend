@@ -5,6 +5,7 @@ import {
   mdiArrowUp,
   mdiBatteryHigh,
   mdiFire,
+  mdiHeatingCoil,
   mdiHome,
   mdiLeaf,
   mdiSolarPower,
@@ -179,6 +180,7 @@ class HuiEnergyDistrubutionCard
     const hasSolarProduction = types.solar !== undefined;
     const hasBattery = types.battery !== undefined;
     const hasGas = types.gas !== undefined;
+    const hasThermal = types.thermal !== undefined;
     const hasWater = types.water !== undefined;
     const gasUnit = this._data.gasUnit;
     const gasDisplayPrecisions = types.gas
@@ -221,6 +223,15 @@ class HuiEnergyDistrubutionCard
         calculateStatisticsSumGrowth(
           this._data.stats,
           types.gas!.map((source) => source.stat_energy_from)
+        ) ?? 0;
+    }
+
+    let thermalUsage: number | null = null;
+    if (hasThermal) {
+      thermalUsage =
+        calculateStatisticsSumGrowth(
+          this._data.stats,
+          types.thermal!.map((source) => source.stat_energy_from)
         ) ?? 0;
     }
 
@@ -405,6 +416,7 @@ class HuiEnergyDistrubutionCard
             lowCarbonEnergy !== undefined ||
             hasSolarProduction ||
             hasGas ||
+            hasThermal ||
             hasWater
               ? html`<div class="row">
                   ${
@@ -480,59 +492,96 @@ class HuiEnergyDistrubutionCard
                             ${
                               gasUsage && this._animate
                                 ? svg`<circle
-                    r="1"
-                    class="gas"
-                    vector-effect="non-scaling-stroke"
-                  >
-                    <animateMotion
-                      dur="2s"
-                      repeatCount="indefinite"
-                      calcMode="linear"
-                    >
-                      <mpath xlink:href="#gas" />
-                    </animateMotion>
-                  </circle>`
+                                        r="1"
+                                        class="gas"
+                                        vector-effect="non-scaling-stroke"
+                                      >
+                                        <animateMotion
+                                          dur="2s"
+                                          repeatCount="indefinite"
+                                          calcMode="linear"
+                                        >
+                                          <mpath xlink:href="#gas" />
+                                        </animateMotion>
+                                      </circle>`
                                 : ""
                             }
                           </svg>
                         </div>`
-                      : hasWater
-                        ? html`<div class="circle-container water">
+                      : hasThermal
+                        ? html`<div class="circle-container thermal">
                             <span class="label"
                               >${this.hass.localize(
-                                "ui.panel.lovelace.cards.energy.energy_distribution.water"
+                                "ui.panel.lovelace.cards.energy.energy_distribution.thermal"
                               )}</span
                             >
                             <div class="circle">
-                              <ha-svg-icon .path=${mdiWater}></ha-svg-icon>
-                              ${formatConsumptionShort(
-                                this.hass,
-                                waterUsage,
-                                this._data.waterUnit
-                              )}
+                              <ha-svg-icon
+                                .path=${mdiHeatingCoil}
+                              ></ha-svg-icon>
+                              ${formatNumber(thermalUsage, this.hass.locale, {
+                                maximumFractionDigits: 3,
+                              })}
+                              ${this._data.thermalUnit}
                             </div>
                             <svg width="80" height="30">
-                              <path d="M40 0 v30" id="water" />
+                              <path d="M40 0 v30" id="thermal" />
                               ${
-                                waterUsage && this._animate
+                                thermalUsage && this._animate
                                   ? svg`<circle
-                r="1"
-                class="water"
-                vector-effect="non-scaling-stroke"
-              >
-                <animateMotion
-                  dur="2s"
-                  repeatCount="indefinite"
-                  calcMode="linear"
-                >
-                  <mpath xlink:href="#water" />
-                </animateMotion>
-              </circle>`
+                                    r="1"
+                                    class="thermal"
+                                    vector-effect="non-scaling-stroke"
+                                  >
+                                    <animateMotion
+                                      dur="2s"
+                                      repeatCount="indefinite"
+                                      calcMode="linear"
+                                    >
+                                      <mpath xlink:href="#thermal" />
+                                    </animateMotion>
+                                  </circle>`
                                   : ""
                               }
                             </svg>
                           </div>`
-                        : html`<div class="spacer"></div>`
+                        : hasWater
+                          ? html`<div class="circle-container water">
+                              <span class="label"
+                                >${this.hass.localize(
+                                  "ui.panel.lovelace.cards.energy.energy_distribution.water"
+                                )}</span
+                              >
+                              <div class="circle">
+                                <ha-svg-icon .path=${mdiWater}></ha-svg-icon>
+                                ${formatConsumptionShort(
+                                  this.hass,
+                                  waterUsage,
+                                  this._data.waterUnit
+                                )}
+                              </div>
+                              <svg width="80" height="30">
+                                <path d="M40 0 v30" id="water" />
+                                ${
+                                  waterUsage && this._animate
+                                    ? svg`<circle
+                  r="1"
+                  class="water"
+                  vector-effect="non-scaling-stroke"
+                >
+                  <animateMotion
+                    dur="2s"
+                    repeatCount="indefinite"
+                    calcMode="linear"
+                  >
+                    <mpath xlink:href="#water" />
+                  </animateMotion>
+                </circle>`
+                                    : ""
+                                }
+                              </svg>
+                            </div>`
+                          : html`<div class="spacer"></div>`
                   }
                 </div>`
               : ""
@@ -1071,6 +1120,10 @@ class HuiEnergyDistrubutionCard
       margin-left: 4px;
       height: 130px;
     }
+    .circle-container.thermal {
+      margin-left: 4px;
+      height: 130px;
+    }
     .circle-container.water {
       margin-left: 4px;
       height: 130px;
@@ -1156,6 +1209,17 @@ class HuiEnergyDistrubutionCard
     }
     .gas .circle {
       border-color: var(--energy-gas-color);
+    }
+    .thermal path,
+    .thermal circle {
+      stroke: var(--energy-thermal-color);
+    }
+    circle.thermal {
+      stroke-width: 4;
+      fill: var(--energy-thermal-color);
+    }
+    .thermal .circle {
+      border-color: var(--energy-thermal-color);
     }
     .water path,
     .water circle {
